@@ -29,7 +29,7 @@ The torrent should be structured something like:
 
 The main takeaway from the above diagram is that `peerweb` requires your torrent to have an `index.html` and that you can have nested subdirectories.
 
-For an example, download [ws]() and run it in the `./example` directory in this repo.
+For an example, download [ws](https://www.npmjs.com/package/local-web-server) and run it in the `./example` directory in this repo.
 
 # Dependencies
 
