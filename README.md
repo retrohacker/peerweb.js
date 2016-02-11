@@ -39,7 +39,7 @@ All dependencies can be found in this repo under the `./example` directory.
 * [localforage-v1.2.6](https://github.com/mozilla/localForage)
 * [webtorrent-v0.72.1](https://github.com/feross/webtorrent)
 
-Unfortunately, peerweb only works in Chromium 49 or later (google-chrome-beta at the time of this writing). Chrome <40 has a bug preventing ServiceWorkers from loading `blob` files.
+Unfortunately, peerweb only works in Chromium 49 or later (google-chrome-beta at the time of this writing). Chrome <40 has a bug preventing ServiceWorkers from loading `blob` files and all versions of Firefox that support ServiceWorkers has a bug preventing WebSockets from working when ServiceWorkers are being used for the page.
 
 # Installation
 
