@@ -5,7 +5,7 @@ A client side library for retrieving and rendering a static website over torrent
 
 # Usage
 
-```
+```js
 window.peerweb.init(function(e) {
   if(e) throw e
   window.peerweb.debug = true
@@ -45,7 +45,7 @@ Unfortunately, peerweb only works in Chromium 49 or later (google-chrome-beta at
 
 Download the above dependencies. Place `router.js` in the base of your project directory (along-side `index.html`). Then add the following to the `<head>` of your `index.html` file:
 
-```
+```html
 <script src="./path/to/async-1.5.2.js"></script>
 <script src="./path/to/localforage-1.2.6.min.js"></script>
 <script src="./path/to/webtorrent-0.72.1.min.js"></script>
