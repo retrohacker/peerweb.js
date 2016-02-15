@@ -2,14 +2,6 @@
   var client = new window.WebTorrent()
   var torrentHashPrefix = 'magnet:?xt=urn:btih:'
 
-  function renderError (msg) {
-    document.body.innerHTML = '<h1 style="color: red;">' + msg + '</h1>'
-  }
-
-  if (!window.navigator.serviceWorker) {
-    renderError('Browser does not support service workers, please upgrade')
-  }
-
   var peerweb = window.peerweb = {}
   peerweb.debug = false
   peerweb.render = function peerWebRender (hash) {
@@ -51,7 +43,10 @@
   }
 
   peerweb.init = function peerwebInit (cb) {
-    window.navigator.serviceWorker.register('./router.js').then(function () {
+    if (!window.navigator.serviceWorker) {
+      return cb(new Error('Browser does not support service workers'))
+    }
+    window.navigator.serviceWorker.register('./router.js', { scope: './' }).then(function () {
       verifyRouter(cb)
     }).catch(function (e) {
       verifyRouter(cb)

@@ -14,7 +14,7 @@ self.addEventListener('fetch', function (event) {
   if (method !== 'GET' || request.indexOf(scope) !== 0) {
     console.log('Request', request, 'is not part of scope', scope)
     console.log('Or method', method, 'is not get')
-    return
+    return null
   }
 
   var path = request.substring(scope.length)
