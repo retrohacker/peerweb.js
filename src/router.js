@@ -1,4 +1,6 @@
-import localforage from 'localforage'
+/* global self */
+
+self.importScripts('./localforage-1.2.6.min.js')
 
 self.addEventListener('install', function (event) {
   console.log('Installing!')
@@ -17,12 +19,14 @@ self.addEventListener('fetch', function (event) {
 
   var path = request.substring(scope.length)
   console.log('Fetch request for:', path)
- 
-    event.respondWith(localforage.getItem(path).then(function (resp) {
+  if (path === 'peerweb/status') {
+    event.respondWith(new self.Response('', { status: 234, statusText: 'intercepting' }))
+  } else {
+    event.respondWith(self.localforage.getItem(path).then(function (resp) {
       if (resp) {
         return self.fetch(resp)
       }
       return self.fetch(event.request)
     }))
-  
+  }
 })
