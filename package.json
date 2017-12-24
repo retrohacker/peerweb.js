@@ -1,7 +1,7 @@
 {
   "name": "peerweb",
   "version": "0.0.1",
-  "description": "",
+  "description": "A module to render webpage downloaded via webtorrent",
   "main": "dist/peerweb.js",
   "scripts": {
     "test": "gulp",
@@ -9,13 +9,20 @@
     "test-browser": "gulp test-browser",
     "watch": "gulp watch",
     "build": "gulp build",
+    "prepublish": "npm run build",
     "coverage": "gulp coverage"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Yhozen/peerweb.js.git"
+    "url": "git+https://github.com/Yhozen/peerweb.js.git"
   },
-  "keywords": [],
+  "keywords": [
+    "web",
+    "torrent",
+    "webtorrent",
+    "host",
+    "hostless"
+  ],
   "author": "Garox <gabriel@garox.org>",
   "license": "MIT",
   "bugs": {
@@ -57,5 +64,8 @@
   "dependencies": {
     "async": "^2.6.0",
     "webtorrent": "^0.98.20"
+  },
+  "directories": {
+    "test": "test"
   }
 }
