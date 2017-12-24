@@ -56,7 +56,6 @@
   },
   "dependencies": {
     "async": "^2.6.0",
-    "localforage": "^1.5.5",
     "webtorrent": "^0.98.20"
   }
 }

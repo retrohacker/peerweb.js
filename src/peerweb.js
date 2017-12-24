@@ -1,6 +1,5 @@
 import WebTorrent from './webtorrent' // or 'webtorrent/webtorrent.min'
 import async from 'async'
-import localforage from 'localforage'
 
 /* Mutation */
 String.prototype.replaceAll = function (search, replacement) { return this.replace(new RegExp(search, 'g'), replacement) }
@@ -36,12 +35,7 @@ function renderFromTorrent(torrent, peerweb) {
       if (e) return null
       let path = file.path.slice(torrent.dn.length + 1)
       if (peerweb.debug) console.log('Adding', path, 'to browser storage')
-      localforage.setItem(path, bloburl)
-        .then(() => {
-          replaceObject[path] = bloburl
-          cb()
-        })
-        .catch(cb)
+      replaceObject[path] = bloburl
     })
   }, function (e) {
     if (e && peerweb.debug) console.log('Failed to add files to local storage', e)
