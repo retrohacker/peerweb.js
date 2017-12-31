@@ -1,6 +1,6 @@
 # PeerWeb.js
 
-[![Code Climate](https://codeclimate.com/github/Yhozen/peerweb.js/badges/gpa.svg)](https://codeclimate.com/github/Yhozen/peerweb.js)
+[![Code Climate](https://codeclimate.com/github/Yhozen/peerweb.js/badges/gpa.svg?style=flat-square)](https://codeclimate.com/github/Yhozen/peerweb.js)
 [![Dependency Status](https://david-dm.org/Yhozen/peerweb.js.svg?style=flat-square)](https://david-dm.org/Yhozen/peerweb.js)
 [![devDependency Status](https://david-dm.org/Yhozen/peerweb.js/dev-status.svg?style=flat-square)](https://david-dm.org/Yhozen/peerweb.js#info=devDependencies)
  [![Standard - JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square)](https://standardjs.com)
