@@ -1,6 +1,6 @@
 # PeerWeb.js
 
-[![Code Climate](https://codeclimate.com/github/Yhozen/steemsites/badges/gpa.svg?style=flat-square)](https://codeclimate.com/github/Yhozen/steemsites)
+[![Code Climate](https://codeclimate.com/github/Yhozen/peerweb.js/badges/gpa.svg?style=flat-square)](https://codeclimate.com/github/Yhozen/peerweb.js)
 [![Dependency Status](https://david-dm.org/Yhozen/peerweb.js.svg?style=flat-square)](https://david-dm.org/Yhozen/peerweb.js)
 [![devDependency Status](https://david-dm.org/Yhozen/peerweb.js/dev-status.svg?style=flat-square)](https://david-dm.org/Yhozen/peerweb.js#info=devDependencies)
  [![Standard - JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square)](https://standardjs.com)
@@ -38,4 +38,4 @@ peerweb.render(YOUR_MAGNET_LINK)
 ```
 ## Contribute
 
-Feel free to create pull request and issues with bugs or feature request. There are tons of features planned as render index faster, do not redownload files... etc. 
+Feel free to create pull request and issues with bugs or feature request. There are tons of features planned as render index faster, do not redownload files, get magnet link from files... etc. 
