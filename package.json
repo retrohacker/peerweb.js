@@ -1,6 +1,6 @@
 {
   "name": "peerweb",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A module to render webpage downloaded via webtorrent",
   "main": "src/peerweb.js",
   "scripts": {
@@ -9,7 +9,6 @@
     "test-browser": "gulp test-browser",
     "watch": "gulp watch",
     "build": "gulp build",
-    "prepublish": "npm run build && rm dist/peerweb.js && rm dist/peerweb.js.map && rm dist/peerweb.min.js.map && mv dist/peerweb.min.js dist/peerweb.js",
     "coverage": "gulp coverage"
   },
   "repository": {
@@ -62,8 +61,7 @@
     "mainVarName": "peerweb"
   },
   "dependencies": {
-    "async": "^2.6.0",
-    "webtorrent": "^0.98.20"
+    "async": "^2.6.0"
   },
   "directories": {
     "test": "test"

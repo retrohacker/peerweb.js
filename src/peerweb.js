@@ -11,20 +11,33 @@ const { log, info } = console
 // Create class to export
 export default class peerweb {
   constructor (debug = false) {
-    this.debug = debug
+    this.d = debug
+  }
+  debug (text) {
+    if (this.d) log(text)
   }
   render (magnet) {
     const that = this
-    if (peerweb.debug) log('Downloading torrent from', magnet)
+    this.debug('Downloading torrent from ' + magnet)
     client.add(magnet, function (torrent) {
       renderFromTorrent(torrent, that)
+    })
+  }
+  getMagnet (files) {
+    const { debug } = this
+    return new Promise((resolve,reject) => {
+      client.seed(files, torrent => {
+        torrent.on('error', reject)
+        debug(torrent)
+        resolve(torrent.magnetURI)
+      })
     })
   }
 }
 
 function renderFromTorrent(torrent, peerweb) {
-  if (peerweb.debug) log('Torrent Downloaded:')
-  if (peerweb.debug) log(torrent)
+  peerweb.debug('Torrent Downloaded:')
+  peerweb.debug(torrent)
   // Get index.html
   const index = torrent.files.find(function (file) {
     return file.name.endsWith('index.html')
@@ -33,20 +46,20 @@ function renderFromTorrent(torrent, peerweb) {
   // Store each file in browser storage
   async.each(torrent.files, function (file, cb) {
     file.getBlobURL(function (e, bloburl) {
-      if (e && peerweb.debug)
+      if (e && peerweb.d)
         log('Failed to get blob for', file.path, ':', e)
       if (e) return null
       let path = file.path.slice(torrent.dn.length + 1)
-      if (peerweb.debug) log('Adding', path, 'to browser storage')
+      if (peerweb.d) log('Adding', path, 'to browser storage')
       replaceObject[path] = bloburl
       cb() // not sure if needed
     })
   }, function (e) {
-    if (e && peerweb.debug) log('Failed to add files to local storage', e)
+    if (e && peerweb.d) log('Failed to add files to local storage', e)
     if (e) return null
-    if (peerweb.debug) log('Files added, will render index soon')
+    peerweb.debug('Files added, will render index soon')
     index.getBuffer(function (e, buffer) {
-      if (e && peerweb.debug) log('Failed to get index.html buffer', e)
+      if (e && peerweb.d) log('Failed to get index.html buffer', e)
       if (e) return null
       // Add HTML
       renderHTML(buffer, replaceObject)
