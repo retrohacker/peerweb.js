@@ -9,6 +9,7 @@
     "test-browser": "gulp test-browser",
     "watch": "gulp watch",
     "build": "gulp build",
+    "prepublish": "npm run build && rm dist/peerweb.js && rm dist/peerweb.js.map && rm dist/peerweb.min.js.map && mv dist/peerweb.min.js dist/peerweb.js",
     "coverage": "gulp coverage"
   },
   "repository": {
