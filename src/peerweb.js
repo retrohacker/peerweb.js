@@ -24,7 +24,7 @@ export default class peerweb {
     })
   }
   getMagnet (files) {
-    const { debug } = this
+    const debug = this.debug.bind(this)
     return new Promise((resolve,reject) => {
       client.seed(files, torrent => {
         torrent.on('error', reject)
@@ -46,8 +46,7 @@ function renderFromTorrent(torrent, peerweb) {
   // Store each file in browser storage
   async.each(torrent.files, function (file, cb) {
     file.getBlobURL(function (e, bloburl) {
-      if (e && peerweb.d)
-        log('Failed to get blob for', file.path, ':', e)
+      if (e && peerweb.d) log('Failed to get blob for', file.path, ':', e)
       if (e) return null
       let path = file.path.slice(torrent.dn.length + 1)
       if (peerweb.d) log('Adding', path, 'to browser storage')
