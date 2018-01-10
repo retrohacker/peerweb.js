@@ -2,7 +2,7 @@
   "name": "peerweb",
   "version": "0.1.5",
   "description": "A module to render webpage downloaded via webtorrent",
-  "main": "src/peerweb.js",
+  "main": "dist/peerweb.js",
   "scripts": {
     "test": "gulp",
     "lint": "gulp lint",
