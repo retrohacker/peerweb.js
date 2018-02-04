@@ -27,5 +27,6 @@ bower_components
 coverage
 tmp
 dist
+borrar
 # Users Environment Variables
 .lock-wscript

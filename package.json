@@ -62,7 +62,8 @@
     "mainVarName": "peerweb"
   },
   "dependencies": {
-    "async": "^2.6.0"
+    "async": "^2.6.0",
+    "buffer": "^5.0.8"
   },
   "directories": {
     "test": "test"
