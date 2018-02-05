@@ -1,6 +1,6 @@
 import WebTorrent from './webtorrent' // or 'webtorrent/webtorrent.min'
 import async from 'async'
-var Buffer = require('buffer/').Buffer 
+var Buffer = require('buffer/').Buffer
 
 /* Mutation */
 String.prototype.replaceAll = function (search, replacement) { return this.replace(new RegExp(search, 'g'), replacement) }
@@ -19,15 +19,18 @@ export default class Peerweb {
     this.hash = new Buffer(20).fill(name)
     this.peers = []
     this._discoverPeers()
-    this.sites = []
+    this.sites = {}
     this.publish = this.publish.bind(this)
     this.render = this.render.bind(this)
+    this.broadcast = this.broadcast.bind(this)
   }
   debug (text) {
     if (this.d) info(text)
   }
   publish (page) {
     this.broadcast({addSite: page})
+    const { name, magnetURI } = page
+    this.sites[name] = magnetURI
   }
   render (magnet) {
     this.debug('Downloading torrent from ' + magnet)
@@ -130,8 +133,8 @@ function onPeer (peer, self) {
     peer.on('close', onClose)
     peer.on('error', onClose)
     peer.on('end', onClose)
-    if (sites == []) {
-      broadcast({ isEmpty: true})
+    if (isEmpty(sites)) {
+      broadcast({ isEmpty: true })
     }
   }
   function onClose () {
@@ -148,14 +151,19 @@ function onPeer (peer, self) {
     } catch (err) {
       console.error(err.message)
     }
-    if (data.isEmpty && sites != []) {
-      peer.send(JSON.stringify({ addSite: sites }))
+    if (data.isEmpty) {
+      peer.send(JSON.stringify({ addSites: sites }))
     }
-    if (sites == [] && data.sites) {
-      sites = data.sites
-    }
+
     if (data.addSite) {
-      sites.push(data.addSite)
+      const { name, magnetURI } = data.addSite
+        sites[name] = magnetURI
+    }
+    if (data.addSites) {
+      let payload = data.addSites
+      for (let name of Object.keys(payload)) {
+        sites[name] = payload[name]
+      } 
     }
   }
 
@@ -196,4 +204,7 @@ function included (peers, peer) {
     if (p.id == peer.id) bol = true
   })
   return bol
+}
+function isEmpty (obj) {
+  return Object.keys(obj).length === 0
 }
