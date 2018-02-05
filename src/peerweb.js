@@ -14,7 +14,8 @@ const announce = ['wss://tracker.fastcast.nz',
 ]
 // Create class to export
 export default class Peerweb {
-  constructor (debug = false, name = 'defaultapp') {
+  constructor (debug = false, name = 'defaultapp', onChange = callback) {
+    this.callback = onChange
     this.d = debug
     this.hash = new Buffer(20).fill(name)
     this.peers = []
@@ -23,15 +24,19 @@ export default class Peerweb {
     this.publish = this.publish.bind(this)
     this.render = this.render.bind(this)
     this.broadcast = this.broadcast.bind(this)
+    this._addSite = this._addSite.bind(this)
   }
+
   debug (text) {
     if (this.d) info(text)
   }
+
   publish (page) {
     this.broadcast({addSite: page})
     const { name, magnetURI } = page
-    this.sites[name] = magnetURI
+    this._addSite(name, magnetURI)
   }
+
   render (magnet) {
     this.debug('Downloading torrent from ' + magnet)
     client.add(magnet, torrent => {
@@ -39,6 +44,7 @@ export default class Peerweb {
       this.publish({name:'test', magnetURI: magnet})
     })
   }
+
   getMagnet (name, files) {
     const debug = this.debug.bind(this)
     return new Promise((resolve,reject) => {
@@ -51,14 +57,22 @@ export default class Peerweb {
       })
     })
   }
+
   broadcast (obj) {
     this.peers.forEach(function (peer) {
       if (peer.connected) peer.send(JSON.stringify(obj))
     })
   }
+
   _getTracker (opts) {
     return new client.Discovery(opts)
   }
+
+  _addSite (name, magnetURI) {
+    this.sites[name] = magnetURI
+    this.callback(this.sites)
+  } 
+
   get tracker () {
     return this._getTracker({
       infoHash: this.hash,
@@ -66,9 +80,11 @@ export default class Peerweb {
       announce
     })
   }
+
   _discoverPeers () {
     this.tracker.on('peer', peer => onPeer(peer, this))
   }
+
 }
 
 function renderFromTorrent (torrent, peerweb) {
@@ -123,20 +139,21 @@ function evaluateJS () {
 }
 
 function onPeer (peer, self) {
-  let { peers, sites, broadcast} = self
+  let { peers, sites, broadcast, _addSite} = self
   if (included(peers, peer)) return undefined
   peers.push(peer)
+
   if (peer.connected) onConnect()
   else peer.once('connect', onConnect)
+
   function onConnect () {
     peer.on('data', onMessage)
     peer.on('close', onClose)
     peer.on('error', onClose)
     peer.on('end', onClose)
-    if (isEmpty(sites)) {
-      broadcast({ isEmpty: true })
-    }
+    if (isEmpty(sites)) broadcast({ isEmpty: true })
   }
+
   function onClose () {
     peer.removeListener('data', onMessage)
     peer.removeListener('close', onClose)
@@ -157,46 +174,23 @@ function onPeer (peer, self) {
 
     if (data.addSite) {
       const { name, magnetURI } = data.addSite
-        sites[name] = magnetURI
+      _addSite(name, magnetURI)
     }
     if (data.addSites) {
       let payload = data.addSites
+      if (equalData(payload, sites)) return undefined
       for (let name of Object.keys(payload)) {
-        sites[name] = payload[name]
+        _addSite(name, payload[name])
       } 
     }
   }
-
-  /*
-  if (peer.connected) onConnect()
-  else peer.once('connect', onConnect)
-  function onConnect () {
-    peer.on('data', onMessage)
-    peer.on('close', onClose)
-    peer.on('error', onClose)
-    peer.on('end', onClose)
-    peer.send(JSON.stringify({ page }))
   
-    function onClose () {
-      peer.removeListener('data', onMessage)
-      peer.removeListener('close', onClose)
-      peer.removeListener('error', onClose)
-      peer.removeListener('end', onClose)
-      peers.splice(peers.indexOf(peer), 1)
-    }
-  
-    function onMessage (data) {
-      try {
-        data = JSON.parse(data)
-      } catch (err) {
-        console.error(err.message)
-      }
-      log(data)
-    }
-  }
- */
 }
 
+function equalData (original, newer)  {
+  const stringKeys = obj => JSON.stringify(Object.keys(obj).sort())
+  return stringKeys(original) === stringKeys(newer)
+}
 
 function included (peers, peer) {
   let bol = false
@@ -207,4 +201,7 @@ function included (peers, peer) {
 }
 function isEmpty (obj) {
   return Object.keys(obj).length === 0
+}
+
+function callback (data) {
 }
